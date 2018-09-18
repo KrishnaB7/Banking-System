@@ -1,0 +1,37 @@
+# start MySQL. Will create an empty database on first start
+$ mysql-ctl start
+
+# stop MySQL
+$ mysql-ctl stop
+
+# run the MySQL interactive shell
+$ mysql-ctl cli
+
+# mysql commends for your reference
+show databases;
+create database cmpe207;
+use cmpe207
+source bankSystem_account.sql // import the database, be careful of the file path
+mysqldump -u root -p cmpe207 > cmpe207.sql; // export the database, mysqldump should be run from a normal command prompt instead of the mysql command
+show tables;
+select * from account;
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('cmpe207'); // reset password, MySQL 5.7.5 and earlier
+CREATE TABLE transaction (account VARCHAR(20), time VARCHAR(20), amount decimal(10,2), operation VARCHAR(20));
+drop table transaction;
+RENAME TABLE teller TO relationship;
+
+INSERT INTO transaction (account, time, amount, operation) VALUES("000000", "Sun Dec  3 00:35:16 2017", 100, "Deposit");
+DELETE FROM transaction WHERE account = '000000';
+select * from transaction where account = 'green' limit 10;
+
+
+# install mysqlclient
+sudo apt-get install libmysqlclient-dev
+
+# compile C file:
+gcc -o teller Teller.c -lmysqlclient
+gcc -o bank Bank.c -lmysqlclient
+
+# run program
+./bank
+./teller
